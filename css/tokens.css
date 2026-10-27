@@ -1,0 +1,87 @@
+/* ==========================================================================
+   BHARAT TRAILS DESIGN SYSTEM TOKENS
+   Inspired by premium cinematic Japanese travel editorial aesthetics,
+   custom-tailored for authentic Indian exploration.
+   ========================================================================== */
+
+:root {
+  /* Brand Core Palette */
+  --color-cream: #F6E7C5;
+  --color-cream-light: #FBF4E4;
+  --color-cream-dark: #E8D5AB;
+  --color-charcoal: #10100F;
+  --color-midnight: #171411;
+  --color-midnight-elevated: #221E19;
+  --color-card-bg: #1B1814;
+  --color-card-hover: #26211B;
+  
+  /* Brand Accents */
+  --color-gold: #E8B85C;
+  --color-gold-hover: #F2C774;
+  --color-gold-muted: rgba(232, 184, 92, 0.2);
+  --color-olive: #A6A36B;
+  --color-olive-light: #C0BD88;
+  --color-terracotta: #D36135;
+  --color-emerald: #3B7A57;
+
+  /* Typography Colors */
+  --text-primary: #F7F3EA;
+  --text-secondary: #C4C0B8;
+  --text-muted: #8E8A83;
+  --text-dark: #171411;
+  --text-dark-secondary: #4A463F;
+
+  /* Glassmorphism & Borders */
+  --glass-bg: rgba(23, 20, 17, 0.72);
+  --glass-bg-light: rgba(255, 255, 255, 0.12);
+  --glass-panel: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-medium: rgba(255, 255, 255, 0.25);
+  --border-gold: rgba(232, 184, 92, 0.45);
+  --border-light-mode: rgba(23, 20, 17, 0.15);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --shadow-gold: 0 8px 30px rgba(232, 184, 92, 0.25);
+  --shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+
+  /* Typography Families */
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-heading: 'Manrope', 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Radius Scale */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-drawer: 500;
+  --z-modal-backdrop: 800;
+  --z-modal: 900;
+  --z-toast: 1000;
+}

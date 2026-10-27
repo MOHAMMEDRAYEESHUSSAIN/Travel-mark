@@ -1,0 +1,351 @@
+/* ==========================================================================
+   DESTINATION DETAIL MODAL & CINEMATIC VIEW
+   ========================================================================== */
+
+.detail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 9, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  overflow-y: auto;
+}
+
+.detail-modal-backdrop.open {
+  display: flex;
+}
+
+.detail-modal-dialog {
+  background: #151310;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 1080px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+  position: relative;
+  animation: modalScaleUp 0.25s ease-out;
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.detail-modal-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: rgba(16, 16, 15, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.detail-modal-close:hover {
+  background: var(--color-gold);
+  color: var(--color-charcoal);
+  transform: rotate(90deg);
+}
+
+/* Modal Hero Banner */
+.detail-modal-hero {
+  position: relative;
+  height: 380px;
+  flex-shrink: 0;
+}
+
+.detail-modal-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
+}
+
+.detail-modal-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(21,19,16,0.5) 50%, rgba(21,19,16,1) 100%);
+  pointer-events: none;
+}
+
+.detail-modal-hero-content {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 2;
+}
+
+.detail-modal-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin: var(--space-xs) 0;
+}
+
+.detail-modal-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* Modal Tab Navigation */
+.detail-modal-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-xl);
+  border-bottom: 1px solid var(--border-subtle);
+  background: #181512;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.detail-tab-btn {
+  padding: 14px 18px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.detail-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.detail-tab-btn.active {
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+/* Modal Scrollable Body */
+.detail-modal-body {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.detail-tab-pane {
+  display: none;
+}
+
+.detail-tab-pane.active {
+  display: block;
+}
+
+/* Overview Content Layout */
+.detail-overview-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-xl);
+}
+
+.detail-section-block {
+  margin-bottom: var(--space-xl);
+}
+
+.detail-section-block h3 {
+  font-size: 1.25rem;
+  color: var(--color-gold);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-sidebar-card {
+  background: var(--color-midnight-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.detail-quick-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.detail-quick-meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+}
+
+.detail-quick-meta-item svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-gold);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.quick-meta-label {
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.quick-meta-val {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Local Food & Sacred Places Cards Inside Details */
+.detail-sub-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.detail-sub-card {
+  background: #1B1814;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: all var(--transition-fast);
+}
+
+.detail-sub-card:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+.detail-sub-card h4 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.detail-sub-card-tag {
+  font-size: 0.6875rem;
+  color: var(--color-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Reviews Tab Layout */
+.reviews-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #181512;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.overall-score-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.score-number {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.review-item-card {
+  background: #181512;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.review-author-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.review-author-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.review-author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-gold);
+}
+
+.review-stars {
+  color: var(--color-gold);
+  display: flex;
+  gap: 2px;
+}
+
+@media (max-width: 840px) {
+  .detail-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-modal-hero {
+    height: 260px;
+  }
+  .detail-modal-hero-content {
+    left: var(--space-md);
+    right: var(--space-md);
+  }
+  .detail-modal-tabs {
+    padding: 0 var(--space-md);
+  }
+  .detail-modal-body {
+    padding: var(--space-md);
+  }
+}

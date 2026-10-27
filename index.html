@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel Mark — Discover India Through Real Experiences</title>
+  <meta name="description" content="Discover India's best destinations, authentic community stories, regional cuisines, sacred traditions, and adventure parks through real travelers who have been there." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Typography: Manrope, Inter & DM Serif Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Core Design System & Component Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/hero.css" />
+  <link rel="stylesheet" href="css/destinations.css" />
+  <link rel="stylesheet" href="css/explore.css" />
+  <link rel="stylesheet" href="css/community.css" />
+  <link rel="stylesheet" href="css/gallery.css" />
+  <link rel="stylesheet" href="css/planner.css" />
+  <link rel="stylesheet" href="css/detail-modal.css" />
+  <link rel="stylesheet" href="css/modals.css" />
+  <link rel="stylesheet" href="css/profile.css" />
+  <link rel="stylesheet" href="css/special-pages.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ====================================================================
+         GLOBAL STICKY HEADER
+         ==================================================================== -->
+    <header class="site-header" id="siteHeader">
+      <div class="container header-inner">
+        <!-- Brand Logo -->
+        <a class="brand-logo" onclick="window.navigateToPage('home')">
+          <img src="assets/travel-mark-logo.png" alt="Travel Mark Logo" style="height: 50px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)); border-radius: 6px;" />
+          <div class="brand-text">
+            <span class="brand-name">TRAVEL <span>MARK</span></span>
+            <span class="brand-tagline">Discover India • Real Experiences</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="main-nav" aria-label="Main Navigation">
+          <a class="nav-link active" data-page="home">Home</a>
+          <a class="nav-link" data-page="explore">Explore India</a>
+          <a class="nav-link" data-page="sacred">Sacred Places</a>
+          <a class="nav-link" data-page="foods">Food & Cuisine</a>
+          <a class="nav-link" data-page="amusements">Adventures</a>
+          <a class="nav-link" data-page="community">Community</a>
+          <a class="nav-link" data-page="gallery">Photo Gallery</a>
+          <a class="nav-link" data-page="planner">Travel Planner</a>
+        </nav>
+
+        <!-- Header Actions Right -->
+        <div class="header-actions">
+          <!-- Wishlist Dropdown Button -->
+          <div style="position: relative;">
+            <button class="action-btn" id="wishlistHeaderBtn" aria-label="View Saved Places" title="Saved Places">
+              <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+              <span class="counter-badge" id="wishlistCountBadge" style="display: none;">0</span>
+            </button>
+            <div class="popover-menu" id="wishlistPopover">
+              <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: var(--color-gold); font-size: 0.8125rem; text-transform: uppercase;">Saved Destinations</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Wishlist</span>
+              </div>
+              <div id="wishlistList" style="max-height: 280px; overflow-y: auto;"></div>
+              <div style="padding: 10px 16px; text-align: center; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-subtle);">
+                <button onclick="window.navigateToPage('profile'); document.getElementById('wishlistPopover').style.display='none';" class="btn btn-secondary btn-sm" style="width: 100%;">View All in Profile</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications Dropdown Button -->
+          <div style="position: relative;">
+            <button class="action-btn" id="notifBtn" aria-label="Notifications" title="Notifications">
+              <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+              <span class="counter-badge" id="notifCountBadge" style="display: none;">0</span>
+            </button>
+            <div class="popover-menu" id="notifPopover">
+              <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: var(--color-gold); font-size: 0.8125rem; text-transform: uppercase;">Notifications</span>
+                <span style="font-size: 0.6875rem; color: var(--text-muted);">Real-time</span>
+              </div>
+              <div id="notifList" style="max-height: 280px; overflow-y: auto;"></div>
+            </div>
+          </div>
+
+          <!-- User Menu Trigger -->
+          <button class="user-menu-trigger auth-trigger-btn" aria-label="User Account">
+            <img class="header-user-avatar user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="User Profile" />
+            <span class="user-name-short">Arjun</span>
+            <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+          </button>
+
+          <!-- Hamburger Menu Trigger -->
+          <button class="hamburger-btn" id="hamburgerToggle" aria-label="Toggle Side Navigation Drawer">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side Drawer Backdrop -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Sliding Side Navigation Drawer -->
+    <aside class="side-drawer" id="sideDrawer" aria-label="Side Navigation Drawer">
+      <div class="drawer-header">
+        <div class="drawer-user-info" onclick="window.navigateToPage('profile')">
+          <img class="drawer-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar" />
+          <div>
+            <div class="drawer-user-name" style="font-weight: 700; color: var(--text-primary); font-size: 0.9375rem;">Arjun Venkat</div>
+            <div class="drawer-user-handle" style="font-size: 0.75rem; color: var(--color-gold);">@arjun_wanderlust</div>
+          </div>
+        </div>
+        <button id="drawerCloseBtn" style="color: var(--text-secondary); padding: 8px; cursor: pointer;" aria-label="Close Drawer">
+          <i data-lucide="x" style="width: 22px; height: 22px;"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="drawer-section-title">Navigation Hub</div>
+        <div class="drawer-nav-list">
+          <a class="drawer-nav-item active" data-page="home"><i data-lucide="home"></i> Home</a>
+          <a class="drawer-nav-item" data-page="explore"><i data-lucide="compass"></i> Explore India</a>
+          <a class="drawer-nav-item" data-page="destinations"><i data-lucide="map-pin"></i> Popular Destinations</a>
+          <a class="drawer-nav-item" data-page="sacred"><i data-lucide="sparkles"></i> Religious & Spiritual Places</a>
+          <a class="drawer-nav-item" data-page="foods"><i data-lucide="utensils"></i> Food & Cuisine</a>
+          <a class="drawer-nav-item" data-page="amusements"><i data-lucide="ticket"></i> Adventure & Amusement Parks</a>
+        </div>
+
+        <div class="drawer-section-title">Community & Planning</div>
+        <div class="drawer-nav-list">
+          <a class="drawer-nav-item" data-page="community"><i data-lucide="users"></i> Community Stories</a>
+          <a class="drawer-nav-item" onclick="window.openCreatePostModal()"><i data-lucide="plus-circle"></i> Upload Your Experience</a>
+          <a class="drawer-nav-item" data-page="gallery"><i data-lucide="camera"></i> Travel Photo Gallery</a>
+          <a class="drawer-nav-item" data-page="planner"><i data-lucide="calendar"></i> My Travel Plans</a>
+          <a class="drawer-nav-item" data-page="profile"><i data-lucide="bookmark"></i> Saved Places (Wishlist)</a>
+          <a class="drawer-nav-item" data-page="profile"><i data-lucide="user"></i> My Explorer Profile</a>
+        </div>
+
+        <div class="drawer-section-title">Administration & Legal</div>
+        <div class="drawer-nav-list">
+          <a class="drawer-nav-item" data-page="admin"><i data-lucide="shield"></i> Admin Dashboard</a>
+          <a class="drawer-nav-item" data-page="about"><i data-lucide="info"></i> About Travel Mark</a>
+          <a class="drawer-nav-item" data-page="guidelines"><i data-lucide="book-open"></i> Community Guidelines</a>
+          <a class="drawer-nav-item" data-page="privacy"><i data-lucide="lock"></i> Privacy Policy</a>
+          <a class="drawer-nav-item" data-page="terms"><i data-lucide="file-text"></i> Terms & Conditions</a>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn btn-secondary btn-sm" onclick="window.openAuthModal()" style="width: 100%;">
+          <i data-lucide="log-in"></i> Switch / Sign In Account
+        </button>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         PAGE 1: HOMEPAGE (CINEMATIC INDIA EXPERIENCE)
+         ==================================================================== -->
+    <main class="page-view" id="page-home">
+      <!-- Cinematic Hero Section -->
+      <section class="hero-section">
+        <div class="hero-backdrop-container">
+          <!-- Backdrops -->
+          <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1920&q=80');"></div>
+          <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1920&q=80');"></div>
+          <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1920&q=80');"></div>
+          <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1920&q=80');"></div>
+          <div class="hero-overlay"></div>
+        </div>
+
+        <div class="container hero-content">
+          <div class="badge badge-gold hero-badge">
+            <i data-lucide="compass" style="width: 13px; height: 13px;"></i>
+            AUTHENTIC COMMUNITY-DRIVEN TRAVEL DISCOVERY
+          </div>
+
+          <h1 class="hero-title">
+            INDIA IS MORE THAN <br />
+            <span class="serif-accent">A Destination.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Discover places, flavours, cultures, and unforgettable journeys through the real people who have already walked them.
+          </p>
+
+          <!-- Global Hero Search Bar -->
+          <div class="hero-search-wrapper">
+            <form class="hero-search-box" id="heroSearchForm" role="search">
+              <span class="search-icon-decor"><i data-lucide="search" style="width: 22px; height: 22px;"></i></span>
+              <input type="text" class="search-input-field" id="heroSearchInput" placeholder="Where do you want to go in India? (e.g. Taj Mahal, Varanasi, Biryani, Temples)" autocomplete="off" />
+              <button type="button" class="search-clear-btn" id="heroSearchClear" aria-label="Clear Search Input">✕</button>
+              <button type="submit" class="search-submit-btn">
+                <span>Search</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
+            </form>
+
+            <!-- Autocomplete Suggestion Dropdown -->
+            <div class="autocomplete-dropdown" id="heroAutocompleteDropdown"></div>
+          </div>
+
+          <!-- Hero Action CTAs -->
+          <div class="hero-cta-group">
+            <button class="btn btn-primary btn-lg" onclick="window.navigateToPage('explore')">
+              <i data-lucide="compass"></i> Explore India
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="window.navigateToPage('planner')">
+              <i data-lucide="calendar"></i> Plan My Trip
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="window.openCreatePostModal()">
+              <i data-lucide="upload"></i> Share Your Experience
+            </button>
+          </div>
+
+          <!-- Hero Slide Rotator Dots -->
+          <div class="hero-slide-nav">
+            <span class="hero-dot active"></span>
+            <span class="hero-dot"></span>
+            <span class="hero-dot"></span>
+            <span class="hero-dot"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 Horizontal Featured Cards (Reference Inspiration) -->
+      <section class="featured-cards-section container">
+        <div class="featured-cards-grid">
+          <!-- Card 1: 28 States -->
+          <div class="featured-pill-card" data-target="states" style="--card-bg-img: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80');">
+            <div class="featured-card-content">
+              <div class="featured-card-number">01 / DISCOVERY</div>
+              <div class="featured-card-title">Explore 28 States & 8 UTs</div>
+              <div class="featured-card-action">Browse Regions <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></div>
+            </div>
+          </div>
+
+          <!-- Card 2: Food & Cuisine -->
+          <div class="featured-pill-card" data-target="foods" style="--card-bg-img: url('https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80');">
+            <div class="featured-card-content">
+              <div class="featured-card-number">02 / CULINARY</div>
+              <div class="featured-card-title">Famous Indian Flavours</div>
+              <div class="featured-card-action">Taste Dishes <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></div>
+            </div>
+          </div>
+
+          <!-- Card 3: Sacred Places -->
+          <div class="featured-pill-card" data-target="sacred" style="--card-bg-img: url('https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?auto=format&fit=crop&w=600&q=80');">
+            <div class="featured-card-content">
+              <div class="featured-card-number">03 / SPIRITUAL</div>
+              <div class="featured-card-title">Visit Sacred Places</div>
+              <div class="featured-card-action">Spiritual Sites <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></div>
+            </div>
+          </div>
+
+          <!-- Card 4: Adventure & Fun -->
+          <div class="featured-pill-card" data-target="adventure" style="--card-bg-img: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80');">
+            <div class="featured-card-content">
+              <div class="featured-card-number">04 / THRILL</div>
+              <div class="featured-card-title">Adventure & Fun Parks</div>
+              <div class="featured-card-action">Discover Parks <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></div>
+            </div>
+          </div>
+
+          <!-- Card 5: Hidden Gems -->
+          <div class="featured-pill-card" data-target="hidden-gems" style="--card-bg-img: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80');">
+            <div class="featured-card-content">
+              <div class="featured-card-number">05 / UNEXPLORED</div>
+              <div class="featured-card-title">Experience Hidden Gems</div>
+              <div class="featured-card-action">Secret Spots <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Destinations Showcase -->
+      <section class="destinations-section container">
+        <div class="section-header-row">
+          <div class="section-heading-group">
+            <span class="section-subtitle-tag">ICONS OF INDIA</span>
+            <h2 class="section-main-title">Handcrafted Destination Showcase</h2>
+            <p class="section-description">Curated monuments, tranquil waters, living heritage, and mountain passes documented through authentic traveler eyes.</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" onclick="window.navigateToPage('explore')">
+              View All Destinations
+              <i data-lucide="compass"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Destinations Grid -->
+        <div class="destinations-grid" id="featuredDestinationsGrid"></div>
+      </section>
+
+      <!-- Smart Advisor Discovery Teaser -->
+      <section class="container" style="padding: var(--space-3xl) 0;">
+        <div class="advisor-card-box">
+          <div style="text-align: center; max-width: 600px; margin: 0 auto var(--space-xl) auto;">
+            <div class="badge badge-gold" style="margin-bottom: 8px;">SMART DISCOVERY ASSISTANT</div>
+            <h3 style="font-size: 1.8rem; color: var(--text-primary); margin-bottom: 8px;">What Should I Visit Next?</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">Tell our recommendation engine your travel style, budget, and companions to receive personalized suggestions with clear reasons.</p>
+          </div>
+
+          <form id="smartAdvisorForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+            <div class="form-group">
+              <label class="form-label">What do you love most?</label>
+              <select class="form-select" id="advisorInterestSelect">
+                <option value="history">History, Forts & Architecture</option>
+                <option value="nature">Nature, Rivers & Mountains</option>
+                <option value="spiritual">Spiritual & Sacred Ghats</option>
+                <option value="food">Culinary Trails & Street Food</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trip Duration</label>
+              <select class="form-select" id="advisorDurationSelect">
+                <option value="weekend">Quick Weekend (1-2 Days)</option>
+                <option value="medium">Short Trip (3-4 Days)</option>
+                <option value="week">Full Week (5-7 Days)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Traveling With</label>
+              <select class="form-select" id="advisorCompanionSelect">
+                <option value="solo">Solo Traveler</option>
+                <option value="couple">Couple / Partner</option>
+                <option value="family">Family with Children</option>
+                <option value="friends">Group of Friends</option>
+              </select>
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+              <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px;">
+                <i data-lucide="sparkles"></i> Get Recommendations
+              </button>
+            </div>
+          </form>
+
+          <div id="smartAdvisorResults"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 2: EXPLORE INDIA (ADVANCED FILTERS & INTERACTIVE MAP)
+         ==================================================================== -->
+    <main class="page-view" id="page-explore" style="display: none;">
+      <div class="container explore-container">
+        <!-- Section Header -->
+        <div style="margin-bottom: var(--space-xl);">
+          <span class="section-subtitle-tag">EXPEDITIONS & DISCOVERY</span>
+          <h1 class="section-main-title">Explore India Your Way</h1>
+          <p class="section-description">Filter across historical monuments, sacred pilgrimages, adventure parks, local foods, and travel styles simultaneously.</p>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div class="explore-controls-bar">
+          <div class="explore-search-row">
+            <div class="explore-search-input-box">
+              <i data-lucide="search" style="width: 18px; height: 18px; color: var(--color-gold);"></i>
+              <input type="text" id="exploreSearchInput" placeholder="Filter by city, state, monument, or experience..." />
+            </div>
+
+            <!-- View Toggles: Grid vs Map -->
+            <div class="explore-view-toggles">
+              <button class="view-toggle-btn active" data-view="grid">
+                <i data-lucide="layout-grid"></i> Grid View
+              </button>
+              <button class="view-toggle-btn" data-view="map">
+                <i data-lucide="map"></i> Interactive Map
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Category Tabs -->
+          <div class="filter-tabs-nav">
+            <button class="filter-tab-btn active" data-filter-type="experience"><i data-lucide="compass"></i> Experience Type</button>
+            <button class="filter-tab-btn" data-filter-type="religious"><i data-lucide="sparkles"></i> Sacred Traditions</button>
+            <button class="filter-tab-btn" data-filter-type="food"><i data-lucide="utensils"></i> Cuisine & Diets</button>
+            <button class="filter-tab-btn" data-filter-type="budget"><i data-lucide="wallet"></i> Budget Range</button>
+            <button class="filter-tab-btn" data-filter-type="region"><i data-lucide="globe"></i> Geographic Region</button>
+          </div>
+
+          <!-- Dynamic Option Chips Container -->
+          <div class="filter-options-panel" id="filterChipsContainer"></div>
+
+          <!-- Applied Filter Chips & Result Counter -->
+          <div class="applied-filters-bar">
+            <div class="active-chips-container" id="activeFilterPills"></div>
+            <div class="results-count-sort">
+              <span class="clear-all-filters-btn" id="clearAllFiltersBtn">
+                <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i> Clear All Filters
+              </span>
+              <span>Showing <strong id="resultsCountNumber" style="color: var(--color-gold);">0</strong> destinations</span>
+              <select class="sort-select" id="exploreSortSelect">
+                <option value="rating-desc">Sort by: Highest Rated</option>
+                <option value="reviews-desc">Sort by: Most Reviewed</option>
+                <option value="name-asc">Sort by: Name (A-Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Destination Results Grid -->
+        <div class="destinations-grid" id="exploreDestinationsGrid"></div>
+
+        <!-- Leaflet Map Container -->
+        <div id="exploreMapContainer" style="display: none; height: 600px; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border-medium); box-shadow: 0 16px 40px rgba(0,0,0,0.5);">
+          <div id="exploreLeafletMap" style="width: 100%; height: 100%;"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 3: ALL DESTINATIONS CATALOG
+         ==================================================================== -->
+    <main class="page-view" id="page-destinations" style="display: none;">
+      <div class="container" style="padding: var(--space-3xl) 0;">
+        <div class="special-page-hero" style="background: none; border: none; text-align: left; padding: 0 0 var(--space-2xl) 0;">
+          <span class="section-subtitle-tag">PAN-INDIA REPOSITORY</span>
+          <h1 class="special-page-title">Destinations Across India</h1>
+          <p class="special-page-desc" style="margin: 0;">Comprehensive database of heritage wonders, beaches, hill stations, and sacred sanctuaries.</p>
+        </div>
+        <div class="destinations-grid" id="allDestinationsCatalogGrid"></div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 4: FOOD & CUISINE HUB
+         ==================================================================== -->
+    <main class="page-view" id="page-foods" style="display: none;">
+      <div class="special-page-hero">
+        <div class="container">
+          <span class="section-subtitle-tag">DISCOVER INDIA THROUGH FLAVOURS</span>
+          <h1 class="special-page-title">Authentic Food & Regional Cuisine</h1>
+          <p class="special-page-desc">From fiery Chettinad curries and Awadhi kebabs to Kolkata sweets and Mumbai street snacks. Discover India's culinary heartland.</p>
+        </div>
+      </div>
+      <div class="container" style="padding: var(--space-3xl) 0;">
+        <div class="destinations-grid" id="foodsListGrid"></div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 5: SACRED & SPIRITUAL TOURISM HUB
+         ==================================================================== -->
+    <main class="page-view" id="page-sacred" style="display: none;">
+      <div class="special-page-hero">
+        <div class="container">
+          <span class="section-subtitle-tag">PILGRIMAGES & HERITAGE SANCTUARIES</span>
+          <h1 class="special-page-title">Sacred Places Across Faiths</h1>
+          <p class="special-page-desc">Respectful, verified guides to historic temples, mosques, dargahs, basilicas, monasteries, and gurdwaras with etiquette, hours, and dress codes.</p>
+        </div>
+      </div>
+      <div class="container" style="padding: var(--space-3xl) 0;">
+        <div class="destinations-grid" id="sacredListGrid"></div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 6: ADVENTURE & AMUSEMENT PARKS
+         ==================================================================== -->
+    <main class="page-view" id="page-amusements" style="display: none;">
+      <div class="special-page-hero">
+        <div class="container">
+          <span class="section-subtitle-tag">THRILLS & RECREATION</span>
+          <h1 class="special-page-title">Adventure & Amusement Parks</h1>
+          <p class="special-page-desc">Theme parks, water slides, Himalayan river rafting, scuba diving, and wildlife safaris across India with safety standards and pricing.</p>
+        </div>
+      </div>
+      <div class="container" style="padding: var(--space-3xl) 0;">
+        <div class="destinations-grid" id="amusementsListGrid"></div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 7: COMMUNITY STORIES & JOURNALS
+         ==================================================================== -->
+    <main class="page-view" id="page-community" style="display: none;">
+      <div class="container community-section">
+        <div class="community-feed-header">
+          <div>
+            <span class="section-subtitle-tag">REAL PEOPLE • REAL PLACES</span>
+            <h1 class="section-main-title">Explorer Community Feed</h1>
+            <p class="section-description">Unfiltered, authentic travel journals shared by community travelers across India.</p>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div class="community-feed-sort">
+              <button class="feed-sort-btn active" data-sort="newest">Newest</button>
+              <button class="feed-sort-btn" data-sort="likes">Most Liked</button>
+              <button class="feed-sort-btn" data-sort="rating">Top Rated</button>
+            </div>
+            <button class="btn btn-primary" onclick="window.openCreatePostModal()">
+              <i data-lucide="plus-circle"></i> Share Your Journey
+            </button>
+          </div>
+        </div>
+
+        <div class="community-layout-grid">
+          <!-- Main Feed -->
+          <div id="communityStoriesFeed"></div>
+
+          <!-- Sidebar Community Info -->
+          <aside>
+            <div style="background: var(--color-midnight-elevated); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;">
+              <h4 style="font-size: 0.9375rem; color: var(--color-gold); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Community Trust
+              </h4>
+              <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">Travel Mark is built by travelers for travelers. We prioritize honest spending breakdowns, local etiquette reminders, and hidden gems over commercial tourist traps.</p>
+              <button class="btn btn-secondary btn-sm" onclick="window.navigateToPage('guidelines')" style="width: 100%;">Read Guidelines</button>
+            </div>
+
+            <div style="background: var(--color-midnight-elevated); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 20px;">
+              <h4 style="font-size: 0.9375rem; color: var(--color-gold); text-transform: uppercase; margin-bottom: 12px;">Trending Tags</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <span class="card-tag" style="cursor: pointer;" onclick="appState.exploreFilters.searchQuery='Ghats'; window.navigateToPage('explore');">#Ghats</span>
+                <span class="card-tag" style="cursor: pointer;" onclick="appState.exploreFilters.searchQuery='Forts'; window.navigateToPage('explore');">#Forts</span>
+                <span class="card-tag" style="cursor: pointer;" onclick="appState.exploreFilters.searchQuery='Himalayas'; window.navigateToPage('explore');">#Himalayas</span>
+                <span class="card-tag" style="cursor: pointer;" onclick="appState.exploreFilters.searchQuery='StreetFood'; window.navigateToPage('explore');">#StreetFood</span>
+                <span class="card-tag" style="cursor: pointer;" onclick="appState.exploreFilters.searchQuery='Kerala'; window.navigateToPage('explore');">#Backwaters</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 8: TRAVEL PHOTOGRAPHY GALLERY
+         ==================================================================== -->
+    <main class="page-view" id="page-gallery" style="display: none;">
+      <div class="container gallery-section">
+        <div class="gallery-controls-bar">
+          <div>
+            <span class="section-subtitle-tag">CAPTURED BY EXPLORERS</span>
+            <h1 class="section-main-title">India in Photographs</h1>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div class="gallery-filter-chips">
+              <button class="gallery-filter-chip active" data-tag="all">All Photos</button>
+              <button class="gallery-filter-chip" data-tag="Heritage">Heritage</button>
+              <button class="gallery-filter-chip" data-tag="Spiritual">Spiritual</button>
+              <button class="gallery-filter-chip" data-tag="Mountains">Himalayas</button>
+              <button class="gallery-filter-chip" data-tag="Backwaters">Backwaters</button>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="window.openPhotoUploadModal()">
+              <i data-lucide="upload"></i> Upload Photo
+            </button>
+          </div>
+        </div>
+
+        <div class="gallery-masonry-grid" id="galleryMasonryGrid"></div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 9: PERSONALIZED TRAVEL PLANNER
+         ==================================================================== -->
+    <main class="page-view" id="page-planner" style="display: none;">
+      <div class="container planner-section">
+        <div class="planner-wizard-card">
+          <div style="text-align: center; max-width: 650px; margin: 0 auto;">
+            <div class="badge badge-gold" style="margin-bottom: 8px;">INTERACTIVE ITINERARY GENERATOR</div>
+            <h1 style="font-size: 2.2rem; color: var(--text-primary); margin-bottom: 8px;">Plan Your Indian Journey</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9375rem;">Build customized, day-by-day travel schedules with realistic budget estimates, transport links, and local food stops.</p>
+          </div>
+
+          <form id="travelPlannerForm" class="planner-form-grid">
+            <div class="form-group">
+              <label class="form-label">Starting City</label>
+              <input type="text" class="form-input" id="plannerStartInput" placeholder="e.g. Delhi, Mumbai, Bengaluru" value="Delhi" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Destination / Region</label>
+              <input type="text" class="form-input" id="plannerDestInput" placeholder="e.g. Jaipur, Varanasi, Kerala, Goa" value="Jaipur, Rajasthan" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Duration (Days)</label>
+              <select class="form-select" id="plannerDaysSelect">
+                <option value="1">1 Day</option>
+                <option value="2">2 Days (Weekend)</option>
+                <option value="3" selected>3 Days</option>
+                <option value="4">4 Days</option>
+                <option value="5">5 Days</option>
+                <option value="7">7 Days (Full Week)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Budget Range</label>
+              <select class="form-select" id="plannerBudgetSelect">
+                <option value="Budget">Budget Explorer (Hostels & Public Transport)</option>
+                <option value="Mid-range" selected>Mid-Range (Comfort Hotels & Cabs)</option>
+                <option value="Luxury">Heritage & Luxury</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Number of Travellers</label>
+              <input type="number" class="form-input" id="plannerTravellersInput" value="2" min="1" max="20" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Transport Preference</label>
+              <select class="form-select" id="plannerTransportSelect">
+                <option value="cabs">Private EV / Cabs & Metro</option>
+                <option value="train">Vande Bharat & Express Trains</option>
+                <option value="flight">Domestic Flights</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">What interests you most?</label>
+              <div class="form-chip-grid" id="plannerInterestsGroup">
+                <span class="selectable-chip active">Forts & Heritage</span>
+                <span class="selectable-chip active">Local Food Trails</span>
+                <span class="selectable-chip">Ancient Temples</span>
+                <span class="selectable-chip">Sunrise Photography</span>
+                <span class="selectable-chip">Bazaars & Crafts</span>
+                <span class="selectable-chip">Adventure & Water Sports</span>
+              </div>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 10px;">
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                <i data-lucide="sparkles"></i> Generate Personalized Itinerary
+              </button>
+            </div>
+          </form>
+
+          <!-- Generated Itinerary View -->
+          <div id="itineraryOutputContainer" class="itinerary-view-container"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 10: USER PROFILE & DASHBOARD
+         ==================================================================== -->
+    <main class="page-view" id="page-profile" style="display: none;">
+      <div class="container profile-section">
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+          <div class="profile-cover-banner" style="background-image: url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1400&q=80');">
+            <div class="profile-cover-overlay"></div>
+          </div>
+          <div class="profile-identity-bar">
+            <div class="profile-user-left">
+              <img class="profile-avatar-large" id="profileLargeAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" />
+              <div class="profile-name-group">
+                <h2 id="profileDisplayName">Arjun Venkat</h2>
+                <div class="profile-username" id="profileUsername">@arjun_wanderlust</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);"><i data-lucide="map-pin" style="width: 12px; height: 12px; display: inline;"></i> <span id="profileRegion">Bengaluru, Karnataka</span></div>
+                <p class="profile-bio-text" id="profileBio">Passionate photographer, mountain trekker, and heritage explorer discovering India one chai stall and ghat at a time.</p>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-secondary btn-sm" id="openEditProfileBtn">
+                <i data-lucide="edit"></i> Edit Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- Profile Stats Row -->
+          <div style="display: flex; gap: 24px; padding: 16px 32px; border-top: 1px solid var(--border-subtle); background: rgba(0,0,0,0.3); flex-wrap: wrap;">
+            <div><strong style="color: var(--color-gold); font-size: 1.1rem;" id="profileStatStories">0</strong> <span style="font-size: 0.8125rem; color: var(--text-secondary); margin-left: 4px;">Stories</span></div>
+            <div><strong style="color: var(--color-gold); font-size: 1.1rem;" id="profileStatSaved">0</strong> <span style="font-size: 0.8125rem; color: var(--text-secondary); margin-left: 4px;">Saved Places</span></div>
+            <div><strong style="color: var(--color-gold); font-size: 1.1rem;" id="profileStatPlans">0</strong> <span style="font-size: 0.8125rem; color: var(--text-secondary); margin-left: 4px;">Saved Plans</span></div>
+            <div><strong style="color: var(--color-gold); font-size: 1.1rem;" id="profileStatPhotos">0</strong> <span style="font-size: 0.8125rem; color: var(--text-secondary); margin-left: 4px;">Photos</span></div>
+          </div>
+        </div>
+
+        <!-- Profile Tabs -->
+        <div style="display: flex; gap: 12px; border-bottom: 1px solid var(--border-medium); margin-bottom: 24px;">
+          <button class="profile-tab-btn active" data-tab="saved" style="padding: 10px 18px; font-weight: 700; font-size: 0.875rem; color: var(--color-gold); border-bottom: 2px solid var(--color-gold); cursor: pointer;">
+            Saved Wishlist
+          </button>
+          <button class="profile-tab-btn" data-tab="stories" style="padding: 10px 18px; font-weight: 700; font-size: 0.875rem; color: var(--text-secondary); cursor: pointer;">
+            My Published Stories
+          </button>
+          <button class="profile-tab-btn" data-tab="plans" style="padding: 10px 18px; font-weight: 700; font-size: 0.875rem; color: var(--text-secondary); cursor: pointer;">
+            My Travel Plans
+          </button>
+        </div>
+
+        <!-- Tab Panes -->
+        <div class="profile-pane" id="profilePane-saved">
+          <div class="destinations-grid" id="profileSavedGrid"></div>
+        </div>
+
+        <div class="profile-pane" id="profilePane-stories" style="display: none;">
+          <div id="profileStoriesGrid"></div>
+        </div>
+
+        <div class="profile-pane" id="profilePane-plans" style="display: none;">
+          <div id="profilePlansGrid"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 11: ADMIN DASHBOARD
+         ==================================================================== -->
+    <main class="page-view" id="page-admin" style="display: none;">
+      <div class="container admin-section">
+        <div style="margin-bottom: 24px;">
+          <div class="badge badge-gold" style="margin-bottom: 6px;">PLATFORM GOVERNANCE</div>
+          <h1 class="section-main-title">Admin Operations & Moderation</h1>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="admin-metrics-grid">
+          <div class="admin-metric-card">
+            <div class="admin-metric-icon"><i data-lucide="map-pin"></i></div>
+            <div>
+              <div class="admin-metric-val" id="adminMetricDestinations">10</div>
+              <div class="admin-metric-label">Destinations</div>
+            </div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-icon"><i data-lucide="users"></i></div>
+            <div>
+              <div class="admin-metric-val" id="adminMetricStories">3</div>
+              <div class="admin-metric-label">Community Stories</div>
+            </div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-icon"><i data-lucide="camera"></i></div>
+            <div>
+              <div class="admin-metric-val" id="adminMetricPhotos">6</div>
+              <div class="admin-metric-label">Approved Photos</div>
+            </div>
+          </div>
+          <div class="admin-metric-card">
+            <div class="admin-metric-icon"><i data-lucide="flag"></i></div>
+            <div>
+              <div class="admin-metric-val" id="adminMetricReports">0</div>
+              <div class="admin-metric-label">Flagged Reports</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Tabs Container -->
+        <div class="admin-card-container">
+          <div class="admin-card-header">
+            <div class="admin-nav-tabs">
+              <button class="admin-tab-btn active" data-target="moderation">Moderation Queue</button>
+              <button class="admin-tab-btn" data-target="destinations">Manage Destinations</button>
+            </div>
+          </div>
+
+          <!-- Moderation Pane -->
+          <div class="admin-tab-pane active" id="adminPane-moderation">
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 12px;">Reported Community Posts & Comments</h3>
+            <div id="adminModerationList"></div>
+          </div>
+
+          <!-- Destinations Pane -->
+          <div class="admin-tab-pane" id="adminPane-destinations">
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 12px;">Active Destination Catalog</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--border-medium); color: var(--color-gold); font-size: 0.75rem; text-transform: uppercase;">
+                    <th style="padding: 10px 16px;">Destination</th>
+                    <th style="padding: 10px 16px;">Location</th>
+                    <th style="padding: 10px 16px;">Category</th>
+                    <th style="padding: 10px 16px;">Rating</th>
+                    <th style="padding: 10px 16px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminDestinationsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 12: ABOUT TRAVEL MARK
+         ==================================================================== -->
+    <main class="page-view" id="page-about" style="display: none;">
+      <div class="container" style="padding: var(--space-4xl) 0;">
+        <div class="legal-content-card">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+            <img src="assets/travel-mark-logo.png" style="height: 64px; object-fit: contain;" alt="Logo" />
+            <div>
+              <h1 style="font-size: 2rem; color: var(--text-primary); line-height: 1.1;">Travel Mark</h1>
+              <div style="color: var(--color-gold); font-weight: 700;">Discover India. Experience More. Share Your Journey.</div>
+            </div>
+          </div>
+          <h2>Our Core Philosophy</h2>
+          <p>Travel Mark was conceived as an independent, traveler-powered platform dedicated to celebrating the authentic soul of India. India is far more than a checklist of generic landmarks—it is a tapestry of over 28 states, 8 union territories, thousands of regional flavours, ancient spiritual lineages, and breathtaking landscapes.</p>
+          <p>We reject staged commercial tourist traps and sponsored exaggerations. Here, every guide, tip, price estimate, and photograph comes from travelers who have personally walked the stone steps, tasted the street food, and meditated on the river ghats.</p>
+          <h2>Responsible Tourism</h2>
+          <p>We actively advocate for zero-waste travel, respecting indigenous traditions, wearing appropriate attire at sacred temples, mosques, and gurdwaras, and protecting fragile ecosystems across the Himalayas, Western Ghats, and coral archipelagos.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 13: COMMUNITY GUIDELINES
+         ==================================================================== -->
+    <main class="page-view" id="page-guidelines" style="display: none;">
+      <div class="container" style="padding: var(--space-4xl) 0;">
+        <div class="legal-content-card">
+          <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 16px;">Community Guidelines</h1>
+          <p>To keep Travel Mark an inspiring, welcoming, and truthful home for travelers, all members agree to the following standards:</p>
+          <h2>1. Authentic & Real Experiences Only</h2>
+          <p>Only publish reviews, tips, and photos from trips you have personally undertaken. Do not post fabricated reviews or commercial ads masquerading as travel stories.</p>
+          <h2>2. Deep Respect for Sacred Places & Traditions</h2>
+          <p>India is home to diverse faiths—Hinduism, Islam, Christianity, Sikhism, Buddhism, Jainism, and tribal customs. Always follow local dress codes, remove footwear when required, refrain from unauthorized photography during prayers, and write about all traditions with dignity.</p>
+          <h2>3. Protect Fragile Wildlife & Environments</h2>
+          <p>Never promote illegal wildlife feeding, trespassing on protected tribal zones, or littering plastics. Do not publish exact GPS coordinates of delicate, non-tourist wildlife habitats.</p>
+          <h2>4. Safety and Constructive Community</h2>
+          <p>Harassment, discriminatory remarks, hate speech, and spam result in immediate account restriction. Help our moderation team by reporting violating posts.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 14: PRIVACY POLICY
+         ==================================================================== -->
+    <main class="page-view" id="page-privacy" style="display: none;">
+      <div class="container" style="padding: var(--space-4xl) 0;">
+        <div class="legal-content-card">
+          <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 16px;">Privacy Policy</h1>
+          <p>Travel Mark is committed to safeguarding your personal data. We strictly collect only minimal data needed to operate your explorer account and store your travel plans.</p>
+          <h2>Data Protection Principles</h2>
+          <ul>
+            <li>We never sell or rent your personal contact information to third parties.</li>
+            <li>Precise live GPS tracking is never collected without your explicit voluntary permission.</li>
+            <li>Uploaded photographs have sensitive EXIF metadata stripped to protect your personal privacy.</li>
+            <li>You may edit, export, or delete your account data at any time from your profile settings.</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         PAGE 15: TERMS & CONDITIONS
+         ==================================================================== -->
+    <main class="page-view" id="page-terms" style="display: none;">
+      <div class="container" style="padding: var(--space-4xl) 0;">
+        <div class="legal-content-card">
+          <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 16px;">Terms & Conditions</h1>
+          <p>Welcome to Travel Mark. By accessing this platform, you acknowledge that all travel recommendations, timings, and prices are shared by community members for reference purposes. Real ticket prices and hours can vary with local seasons and festival dates; travelers are encouraged to verify critical timings directly with destination authorities.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer style="background: #0E0D0B; border-top: 1px solid var(--border-medium); padding: var(--space-4xl) 0 var(--space-xl) 0; margin-top: auto;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 40px; margin-bottom: 48px; flex-wrap: wrap;">
+          <!-- Brand Column -->
+          <div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+              <img src="assets/travel-mark-logo.png" style="height: 48px; object-fit: contain; border-radius: 4px;" alt="Logo" />
+              <div>
+                <div style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">TRAVEL <span style="color: var(--color-gold);">MARK</span></div>
+                <div style="font-size: 0.6875rem; color: var(--color-olive-light); text-transform: uppercase; letter-spacing: 0.1em;">Discover India Through Real Experiences</div>
+              </div>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; max-width: 380px;">An independent traveler discovery and community sharing network. Real people, real places, real memories across all 28 Indian States & 8 Union Territories.</p>
+          </div>
+
+          <!-- Explore -->
+          <div>
+            <h4 style="font-size: 0.8125rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;">Explore</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.875rem; color: var(--text-secondary);">
+              <a onclick="window.navigateToPage('explore')" style="cursor: pointer;">Explore India</a>
+              <a onclick="window.navigateToPage('destinations')" style="cursor: pointer;">Monuments & Forts</a>
+              <a onclick="window.navigateToPage('sacred')" style="cursor: pointer;">Sacred & Spiritual</a>
+              <a onclick="window.navigateToPage('foods')" style="cursor: pointer;">Food & Cuisine</a>
+              <a onclick="window.navigateToPage('amusements')" style="cursor: pointer;">Adventures & Parks</a>
+            </div>
+          </div>
+
+          <!-- Community -->
+          <div>
+            <h4 style="font-size: 0.8125rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;">Community</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.875rem; color: var(--text-secondary);">
+              <a onclick="window.navigateToPage('community')" style="cursor: pointer;">Travel Journals</a>
+              <a onclick="window.openCreatePostModal()" style="cursor: pointer;">Share Journey</a>
+              <a onclick="window.navigateToPage('gallery')" style="cursor: pointer;">Photography Gallery</a>
+              <a onclick="window.navigateToPage('planner')" style="cursor: pointer;">Personalized Planner</a>
+              <a onclick="window.navigateToPage('guidelines')" style="cursor: pointer;">Community Guidelines</a>
+            </div>
+          </div>
+
+          <!-- Legal & Support -->
+          <div>
+            <h4 style="font-size: 0.8125rem; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;">Platform</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.875rem; color: var(--text-secondary);">
+              <a onclick="window.navigateToPage('about')" style="cursor: pointer;">About Travel Mark</a>
+              <a onclick="window.navigateToPage('admin')" style="cursor: pointer;">Admin Operations</a>
+              <a onclick="window.navigateToPage('privacy')" style="cursor: pointer;">Privacy Policy</a>
+              <a onclick="window.navigateToPage('terms')" style="cursor: pointer;">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 24px; font-size: 0.8125rem; color: var(--text-muted); flex-wrap: wrap; gap: 12px;">
+          <div>© 2026 Travel Mark. Built for independent Indian travel discovery. Real people, real places, real experiences.</div>
+          <div style="color: var(--color-gold); font-weight: 600;">Tagline: Discover India. Experience More. Share Your Journey.</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         GLOBAL MODALS
+         ==================================================================== -->
+
+    <!-- 1. Destination Detail Modal (25 sections) -->
+    <div class="detail-modal-backdrop" id="destinationDetailModal">
+      <div class="detail-modal-dialog">
+        <button class="detail-modal-close" id="closeDetailModalBtn" aria-label="Close Destination Details">✕</button>
+        <div id="detailModalContent"></div>
+      </div>
+    </div>
+
+    <!-- 2. 8-Step Experience Creator Modal -->
+    <div class="modal-overlay" id="createPostModal">
+      <div class="modal-card" style="max-width: 640px;">
+        <div class="modal-header">
+          <div>
+            <span style="font-size: 0.6875rem; color: var(--color-gold); font-weight: 700; text-transform: uppercase;" id="wizardStepIndicator">Step 1 of 8</span>
+            <h3 style="margin-top: 2px;">Share Your Travel Experience</h3>
+          </div>
+          <button class="modal-close-btn" id="closeCreatePostBtn">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Step 1: Select Destination -->
+          <div class="wizard-step-pane" id="wizardStep-1">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 1: Select Destination</h4>
+            <div class="form-group">
+              <label class="form-label">Which destination did you visit?</label>
+              <select class="form-select" id="postDestSelect">
+                <option value="Taj Mahal, Agra">Taj Mahal, Agra (Uttar Pradesh)</option>
+                <option value="Jaipur, Rajasthan">Jaipur Pink City (Rajasthan)</option>
+                <option value="Varanasi Ghats">Varanasi Ghats (Uttar Pradesh)</option>
+                <option value="Alleppey Backwaters">Alleppey Backwaters (Kerala)</option>
+                <option value="Goa Beaches">Goa Coastal Beaches (Goa)</option>
+                <option value="Hampi Ruins">Hampi Heritage Complex (Karnataka)</option>
+                <option value="Mysuru Palace">Mysuru Palace (Karnataka)</option>
+                <option value="Ladakh Pangong">Ladakh & Pangong Tso</option>
+                <option value="Darjeeling Hills">Darjeeling (West Bengal)</option>
+                <option value="Meghalaya Caves">Meghalaya & Living Root Bridges</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Step 2: Add Photographs -->
+          <div class="wizard-step-pane" id="wizardStep-2" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 2: Add Photographs</h4>
+            <div class="form-group">
+              <label class="form-label">Upload your photos (JPG, PNG, WebP)</label>
+              <input type="file" id="postPhotoInput" accept="image/*" multiple class="form-input" />
+            </div>
+            <div style="margin-top: 10px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Or quick test with verified preset photos:</span>
+              <div style="display: flex; gap: 8px; margin-top: 6px;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.addSamplePhoto('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80')">Taj Dawn</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.addSamplePhoto('https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=800&q=80')">Jaipur Fort</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.addSamplePhoto('https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80')">Varanasi Aarti</button>
+              </div>
+            </div>
+            <div id="postPhotoPreviews" style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;"></div>
+          </div>
+
+          <!-- Step 3: Title & Story -->
+          <div class="wizard-step-pane" id="wizardStep-3" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 3: Title & Experience Story</h4>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Catchy Title</label>
+              <input type="text" class="form-input" id="postTitleInput" placeholder="e.g. 48 Hours in Varanasi: Beyond the Postcards" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Travel Story & Real Experience</label>
+              <textarea class="form-textarea" id="postStoryContent" rows="5" placeholder="Share what it felt like, how you got there, honest impressions, and practical moments..." required></textarea>
+            </div>
+          </div>
+
+          <!-- Step 4: Categories -->
+          <div class="wizard-step-pane" id="wizardStep-4" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 4: Experience Categories</h4>
+            <div class="form-group">
+              <label class="form-label">Primary Category</label>
+              <select class="form-select" id="postCategorySelect">
+                <option value="Historical monuments">Historical monuments & Forts</option>
+                <option value="Spiritual & Sacred">Religious & Spiritual Places</option>
+                <option value="Local food trails">Food & Culinary Traditions</option>
+                <option value="Mountains & Trekking">Mountains, Hills & Trekking</option>
+                <option value="Beaches & Islands">Beaches & Coastal Waters</option>
+                <option value="Hidden gems">Hidden Gems & Rural Tourism</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Step 5: Food & Recommendations -->
+          <div class="wizard-step-pane" id="wizardStep-5" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 5: Food & Local Recommendations</h4>
+            <div class="form-group">
+              <label class="form-label">What dishes & eateries should fellow travelers try?</label>
+              <input type="text" class="form-input" id="postFoodInput" placeholder="e.g. Try Bedai-Jalebi at Deviram and Petha at Panchi Store" />
+            </div>
+          </div>
+
+          <!-- Step 6: Practical Costs & Tips -->
+          <div class="wizard-step-pane" id="wizardStep-6" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 6: Costs, Transport & Advice</h4>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Approximate Personal Spending</label>
+              <input type="text" class="form-input" id="postCostInput" placeholder="e.g. ₹4,500 total for 2 days" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Practical Transport Tips & Things to Avoid</label>
+              <input type="text" class="form-input" id="postTipsInput" placeholder="e.g. Pre-book battery golf cart; avoid touts near south gate." />
+            </div>
+          </div>
+
+          <!-- Step 7: Live Preview -->
+          <div class="wizard-step-pane" id="wizardStep-7" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 7: Preview Your Journal Post</h4>
+            <div id="wizardLivePreviewBox"></div>
+          </div>
+
+          <!-- Step 8: Publish -->
+          <div class="wizard-step-pane" id="wizardStep-8" style="display: none;">
+            <h4 style="color: var(--color-gold); margin-bottom: 8px;">Step 8: Ready to Share!</h4>
+            <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6;">By publishing, you confirm this is an authentic travel experience. Your post will be permanently visible to fellow explorers on Travel Mark.</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="wizardPrevBtn" style="display: none;">Previous</button>
+          <button type="button" class="btn btn-primary" id="wizardNextBtn">Next Step</button>
+          <button type="button" class="btn btn-primary" id="wizardPublishBtn" style="display: none; background: var(--color-gold); color: var(--color-charcoal);">Publish Experience</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Fullscreen Lightbox Modal -->
+    <div class="lightbox-modal" id="galleryLightboxModal">
+      <div class="lightbox-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="lightboxLikeBtn" style="display: flex; align-items: center; gap: 6px; color: #fff; cursor: pointer;">
+            <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
+            <span id="lightboxLikesCount" style="font-size: 0.875rem; font-weight: 700;">0 Likes</span>
+          </button>
+        </div>
+        <button id="closeLightboxBtn" style="color: #fff; font-size: 1.5rem; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="flex: 1; display: flex; align-items: center; justify-content: space-between; position: relative;">
+        <button id="lightboxPrevBtn" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-medium); color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <img id="lightboxActiveImg" src="" style="max-height: 75vh; max-width: 82vw; object-fit: contain; margin: 0 auto; border-radius: 8px;" alt="Travel Photo" />
+        <button id="lightboxNextBtn" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-medium); color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+
+      <div style="text-align: center; padding: 12px; background: rgba(0,0,0,0.6); border-radius: 8px;">
+        <div id="lightboxCaptionText" style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 4px;"></div>
+        <div id="lightboxAuthorText" style="font-size: 0.8125rem; color: var(--color-gold);"></div>
+        <div id="lightboxMetaText" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;"></div>
+      </div>
+    </div>
+
+    <!-- 4. Photo Upload Modal -->
+    <div class="modal-overlay" id="uploadPhotoModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Upload Travel Photograph</h3>
+          <button class="modal-close-btn" id="closeUploadPhotoBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Select Photo File</label>
+            <input type="file" id="uploadPhotoFileInput" accept="image/*" class="form-input" />
+            <img id="uploadPhotoPreviewImg" style="display: none; width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Destination</label>
+            <select class="form-select" id="uploadPhotoDestSelect">
+              <option value="taj-mahal-agra">Taj Mahal, Agra</option>
+              <option value="jaipur-rajasthan">Amer Fort, Jaipur</option>
+              <option value="varanasi-ghats">Varanasi Ghats</option>
+              <option value="alleppey-kerala">Alleppey Backwaters</option>
+              <option value="meenakshi-amman-temple">Meenakshi Amman Temple</option>
+              <option value="darjeeling-west-bengal">Darjeeling & Kanchenjunga</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Photo Caption & Story</label>
+            <input type="text" class="form-input" id="uploadPhotoCaptionInput" placeholder="e.g. Golden dawn reflections across the sacred pool" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="submitUploadPhotoBtn">Submit Photo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Authentication Modal -->
+    <div class="modal-overlay" id="authModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Welcome to Travel Mark</h3>
+          <button class="modal-close-btn" id="closeAuthModalBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <!-- Google OAuth Quick Button -->
+          <button type="button" id="googleAuthBtn" class="btn btn-secondary" style="width: 100%; margin-bottom: 16px; border-color: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-1.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.4 7.5 23 12 23z"/></svg>
+            Continue with Google Account
+          </button>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+            <span style="font-size: 0.6875rem; color: var(--text-muted); text-transform: uppercase;">or continue with</span>
+            <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+          </div>
+
+          <!-- Auth Tabs -->
+          <div class="auth-tabs-nav">
+            <button class="auth-tab-btn active" data-target="email">Email Sign In</button>
+            <button class="auth-tab-btn" data-target="otp">Mobile OTP</button>
+            <button class="auth-tab-btn" data-target="register">Register</button>
+          </div>
+
+          <!-- Pane 1: Email Login -->
+          <form class="auth-pane" id="authPane-email">
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Email or Username</label>
+              <input type="text" class="form-input" id="loginEmailInput" value="arjun.venkat@travelmark.in" required />
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" value="travelmark123" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+          </form>
+
+          <!-- Pane 2: Mobile OTP -->
+          <div class="auth-pane" id="authPane-otp" style="display: none;">
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label">Indian Mobile Number</label>
+              <div style="display: flex; gap: 8px;">
+                <span style="background: rgba(16,16,15,0.85); border: 1px solid var(--border-subtle); padding: 10px 12px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.875rem; color: var(--color-gold);">+91</span>
+                <input type="tel" class="form-input" id="authPhoneInput" placeholder="9876543210" style="flex: 1;" />
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="sendOtpBtn" style="width: 100%; margin-bottom: 12px;">Send Verification OTP</button>
+            <div id="otpInputGroup" style="display: none;">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">Enter 4-Digit OTP (Demo: 7492)</label>
+                <input type="text" class="form-input" id="authOtpCodeInput" placeholder="7492" maxlength="4" style="text-align: center; letter-spacing: 0.3em; font-size: 1.2rem;" />
+              </div>
+              <div id="otpTimerText" style="font-size: 0.75rem; color: var(--color-olive-light); margin-bottom: 10px; text-align: center;"></div>
+              <button type="button" class="btn btn-primary" id="verifyOtpBtn" style="width: 100%;">Verify & Sign In</button>
+            </div>
+          </div>
+
+          <!-- Pane 3: Register -->
+          <form class="auth-pane" id="authPane-register" style="display: none;">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="regNameInput" placeholder="Aanya Verma" required />
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-input" id="regUsernameInput" placeholder="aanya_wander" required />
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="regEmailInput" placeholder="aanya@example.com" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Create Explorer Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Edit Profile Modal -->
+    <div class="modal-overlay" id="editProfileModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Edit Explorer Profile</h3>
+          <button class="modal-close-btn" id="closeEditProfileBtn">✕</button>
+        </div>
+        <form id="editProfileForm" class="modal-body">
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label">Display Name</label>
+            <input type="text" class="form-input" id="editNameInput" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="editUsernameInput" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label">Home Region</label>
+            <input type="text" class="form-input" id="editRegionInput" placeholder="Bengaluru, Karnataka" />
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Biography</label>
+            <textarea class="form-textarea" id="editBioInput" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 7. Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+      <div class="modal-card" style="max-width: 420px;">
+        <div class="modal-header">
+          <h3>Share Travel Mark Discovery</h3>
+          <button class="modal-close-btn" id="closeShareModalBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 12px;">Share this travel experience with friends or fellow explorers:</p>
+          <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+            <input type="text" class="form-input" id="shareLinkInput" readonly style="flex: 1;" />
+            <button class="btn btn-primary btn-sm" id="copyShareLinkBtn">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+      <div class="modal-card" style="max-width: 420px;">
+        <div class="modal-header">
+          <h3>Report Inappropriate Content</h3>
+          <button class="modal-close-btn" id="closeReportModalBtn">✕</button>
+        </div>
+        <form id="reportForm" class="modal-body">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Reason for Flagging</label>
+            <select class="form-select" id="reportReasonSelect">
+              <option value="Misleading Information">Misleading or false destination information</option>
+              <option value="Disrespectful to Culture or Religion">Disrespectful to religious customs or local culture</option>
+              <option value="Spam or Commercial Promotion">Spam, unauthorized tout or commercial promotion</option>
+              <option value="Copyright Violation">Copyright or stolen image</option>
+              <option value="Harassment or Hate Speech">Harassment or abusive language</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Additional Details</label>
+            <textarea class="form-textarea" id="reportDetailsTextarea" rows="3" placeholder="Explain why this content violates community trust..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; background: #E25555; color: #fff;">Submit Report</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 9. Review Modal -->
+    <div class="modal-overlay" id="reviewModal">
+      <div class="modal-card" style="max-width: 480px;">
+        <div class="modal-header">
+          <h3>Write a Traveler Review</h3>
+          <button class="modal-close-btn" id="closeReviewModalBtn">✕</button>
+        </div>
+        <form id="reviewForm" class="modal-body">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Destination</label>
+            <select class="form-select" id="reviewDestSelect">
+              <option value="taj-mahal-agra">Taj Mahal, Agra</option>
+              <option value="jaipur-rajasthan">Jaipur Pink City</option>
+              <option value="varanasi-ghats">Varanasi Ghats</option>
+              <option value="alleppey-kerala">Alleppey Backwaters</option>
+              <option value="hampi-karnataka">Hampi Heritage Complex</option>
+              <option value="mysuru-palace">Mysuru Palace</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Your Rating</label>
+            <div id="reviewStarsRating" style="display: flex; gap: 8px; font-size: 1.5rem; color: var(--color-gold); cursor: pointer;">
+              <span class="star-btn"><i data-lucide="star" style="fill: var(--color-gold);"></i></span>
+              <span class="star-btn"><i data-lucide="star" style="fill: var(--color-gold);"></i></span>
+              <span class="star-btn"><i data-lucide="star" style="fill: var(--color-gold);"></i></span>
+              <span class="star-btn"><i data-lucide="star" style="fill: var(--color-gold);"></i></span>
+              <span class="star-btn"><i data-lucide="star" style="fill: var(--color-gold);"></i></span>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Your Practical Review & Tips</label>
+            <textarea class="form-textarea" id="reviewContentInput" rows="4" placeholder="Mention opening crowd conditions, ticket tips, and local food..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Publish Verified Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master JavaScript Application -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
